@@ -96,14 +96,21 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
-    - name: Apply patches(安装补丁)   
+    - name: Apply patches (安装补丁)
       run: |
+        # 配置 Git 用户信息
         git config --global user.name "OpenWrt Builder"
         git config --global user.email "buster-openwrt@ovvo.uk"
+    
+        # 复制补丁文件到目标目录
         cp $PATCHES_FILE_1 $OPENWRT_PATH/feeds/luci
+    
+        # 切换到目标目录
         cd $OPENWRT_PATH/feeds/luci
+    
+        # 应用 Git 补丁
         git am 0001-show-soc-status-on-luci.patch
-  
+        
     - name: Load Custom Configuration(加载自定义配置)
       run: |
         [ -e files ] && mv files $OPENWRT_PATH/files
